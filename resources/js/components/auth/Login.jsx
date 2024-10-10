@@ -96,9 +96,6 @@ const LoginForm = () => {
                                         <button type="submit" className="btn light-lara-btn w-certify-input font-weight-bold">
                                             Login
                                         </button>
-                                        <a className="btn btn-link text-muted mt-2" href="/password/request">
-                                            Forgot Your Password?
-                                        </a>
                                     </div>
                                 </div>
                             </form>

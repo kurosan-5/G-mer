@@ -6,3 +6,234 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+:root {
+    --blue: #3490dc;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #dc3545;
+    --orange: #fd7e14;
+    --yellow: #ffc107;
+    --green: #38c172;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #fff;
+    --gray: #6c757d;
+    --gray-dark: #343a40;
+    --primary: #007bff;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    //カスタムカラー
+    --laracolor:#f58220;
+    --light-laracolor:#fbb161;
+    --more-light-laracolor:#ffdcb6;
+    --light-gray:#fafafa;
+    --more-light-laracolor:#ffdcb6;
+
+}
+
+body{
+    background-color: #fff;
+}
+
+
+.mt-6 {
+    margin-top: 5.7rem !important;
+}
+
+
+.pl-v-6 {
+    padding-left: 3vw !important;
+}
+
+.col-lg-7half {
+flex: 0 0 65%;
+max-width: 65%;
+}
+
+.w-5 {
+    width: 5% !important;
+}
+
+.w-10 {
+    width: 10% !important;
+}
+
+.w-15 {
+    width: 15% !important;
+}
+
+.w-60 {
+    width: 60% !important;
+}
+
+.w-68 {
+    width: 68% !important;
+}
+
+.w-70 {
+    width: 70% !important;
+}
+
+.w-certify-input {
+    width: 90% !important;
+}
+
+.fs-1 {
+    font-size: calc(1.375rem + 1.5vw) !important;
+}
+
+.fs-2 {
+font-size: calc(1.325rem + 0.9vw) !important;
+}
+
+.fs-3 {
+font-size: calc(1.3rem + 0.6vw) !important;
+}
+
+.fs-4 {
+font-size: calc(1.275rem + 0.3vw) !important;
+}
+
+.fs-5 {
+font-size: 1.25rem !important;
+}
+
+.fs-6 {
+font-size: 1rem !important;
+}
+
+.fs-3half {
+    font-size: calc(1.3rem + 0.45vw) !important;
+}
+
+.header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+}
+
+.mh-1000{
+    min-height: 1000px;
+}
+
+ul{
+    list-style-type: none;
+    padding-left: 1rem;
+    margin-bottom: 0;
+}
+
+a{
+    text-decoration: none;
+    color: var(--gray-dark);
+}
+
+a:hover{
+    color: var(--bs-gray);
+}
+
+.sidemenu{
+    overflow: auto;
+    position: sticky;
+    top: 10vh;
+    left: 0;
+    height:85vh;
+}
+
+.light-lara-btn {
+    background-color: var(--light-laracolor);
+    color: #fff;
+    border-color: var(--light-laracolor);
+}
+
+.light-lara-btn:hover {
+    background-color: var(--more-light-laracolor);
+    color:#fff;
+    border-color: var(--more-light-laracolor);
+}
+
+.lara-color{
+    color:var(--laracolor);
+}
+
+.large-border{
+    border: 1px solid #ccc;
+}
+.shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.breadcrumb {
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+  }
+
+.lara-bg-color{
+    background-color: var(--laracolor);
+}
+
+.user_dropdown {
+    width: 300px;
+    display: inline-block;
+    background-color: #fff;
+    transition: all .5s ease;
+    position: relative;
+    padding-top: 0.32rem;
+    padding-bottom: 0.32rem;
+}
+.user_dropdown .select {
+    display: block;
+    height: 63px;
+    border-left: 1px solid #c0c0c0;
+}
+.user_dropdown .user_dropdown-menu {
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    left: 0;
+    margin-top: 1px;
+    box-shadow: 2px 2px 4px rgb(204, 204, 204);
+    border-radius: 0 5px 10px 10px;
+    overflow: hidden;
+    display: none;
+    max-height: 144px;
+    overflow-y: auto;
+    z-index: 9;
+    border:none;
+}
+.user_dropdown .user_dropdown-menu li {
+    transition: all .2s ease-in-out;
+}
+.user_dropdown .user_dropdown-menu li a {
+    width: 100%;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+.user_dropdown .user_dropdown-menu {
+    padding: 0;
+    list-style: none
+}
+.user_dropdown .user_dropdown-menu li:hover {
+    background-color: #f2f2f2
+}
+.user_dropdown .user_dropdown-menu li:active {
+    background-color: #e2e2e2
+}
