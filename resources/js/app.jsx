@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom/client';
 import Split from 'react-split';
 import Home from './components/Home';
 import Header from "./components/Header";
+import LoginForm from './components/auth/Login';
+import RegisterForm from './components/auth/Register';
 
 const App = () => {
     return (
@@ -14,11 +16,13 @@ const App = () => {
                     sizes={[85, 15]} // 各パネルの初期サイズ（パーセンテージ）
                     minSize={100} // パネルの最小サイズ
                     gutterSize={10} // パネル間のスペース
-                    style={{ display: 'flex' }} // Flexboxを使用する
+                    className="d-flex" // Flexboxを使用する
                 >
                     <div>
                         <Routes>
                             <Route path="/home" element={<Home />} />
+                            {/* <Route path="/login" element={<LoginForm />} />
+                            <Route path="/register" element={<RegisterForm />} /> */}
                         </Routes>
                     </div>
                     <div>
