@@ -14,7 +14,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::all();
+        return response()->json(['posts' => $posts]);
     }
 
     /**
@@ -24,7 +25,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return response();
     }
 
     /**
@@ -35,7 +36,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response();
     }
 
     /**
@@ -46,7 +47,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return response();
     }
 
     /**
@@ -57,7 +58,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return response();
     }
 
     /**
@@ -69,7 +70,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        return response();
     }
 
     /**
@@ -80,6 +81,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        return response();
     }
 }
