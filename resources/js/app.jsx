@@ -17,12 +17,13 @@ axios.interceptors.request.use(function(config){
     config.headers.Authorization = token ? `Bearer ${token}` : '';
     return config;
 });
+import InputForm from './components/InputForm';
 
 const App = () => {
     return (
         <>
             <Header />
-            <div className='mt-6'>
+            <div className='mt-5'>
                 <Split
                     sizes={[85, 15]} // 各パネルの初期サイズ（パーセンテージ）
                     minSize={100} // パネルの最小サイズ
@@ -34,6 +35,7 @@ const App = () => {
                             <Route path="/" element={<Home />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
+                            <Route path="/input" element={<InputForm />} />
                         </Routes>
                     </div>
                     <div>

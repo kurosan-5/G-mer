@@ -18,7 +18,6 @@ use App\Http\Controllers\PostController;
 
 Route::resource('posts', PostController::class);
 
-
 use App\Models\User;
 
 use App\Http\Controllers\Auth\AuthController;
