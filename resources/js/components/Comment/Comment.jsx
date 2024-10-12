@@ -35,7 +35,7 @@ const CommentList = ({post}) => {
 
 const Comment = ({comment, user}) => {
     return (
-        <CardUI sx={{ maxWidth : '90%' }}>
+        <CardUI>
             <CardContent>
                 <TextUI variant="subtitle" component="div">
                     {user.name}
