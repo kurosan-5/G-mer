@@ -1,26 +1,44 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const [remember, setRemember] = useState(false);
-    const [errors, setErrors] = useState({});
 
-    const handleSubmit = async (e) => {
+const Login = () => {
+    const navigate = useNavigate();
+
+    const [loginInput, setLogin] = useState({
+        name: '',
+        password: '',
+        error_list: [],
+    });
+
+    const handleInput = (e) => {
+        e.persist();
+        setLogin({...loginInput, [e.target.name]: e.target.value});
+    }
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setErrors({}); // Reset errors
 
-        try {
-            const response = await axios.post('/login', {
-                name,
-                password,
-                remember,
-            });
-        } catch (error) {
-            // Handle error, e.g., set validation errors
-            setErrors(error.response.data.errors || {});
+        const data = {
+            name: loginInput.name,
+            password: loginInput.password,
         }
+
+        axios.get('/sanctum/csrf-cookie').then(response => {
+            axios.post(`api/login`, data).then(res => {
+                if(res.data.status === 200){
+                    localStorage.setItem('auth_token', res.data.token);
+                    localStorage.setItem('auth_name', res.data.username);
+                    navigate('/');
+                    location.reload();
+                } else if (res.data.status === 401){
+                    
+                } else {
+                    setLogin({...loginInput, error_list: res.data.validation_errors});
+                }
+            });
+        });
     };
 
     return (
@@ -30,64 +48,38 @@ const LoginForm = () => {
                     <div className="card mt-5 shadow">
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
-                                <label htmlFor="name" className="col-form-label font-weight-bold">Name</label>
+                                <label htmlFor='name' className="col-form-label font-weight-bold">Name</label>
                                 <div className="form-group row mt-2">
                                     <div className="w-certify-input mx-auto">
                                         <input
                                             id="name"
                                             type="text"
-                                            className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                                            className={`form-control`}
                                             name="name"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
+                                            value={loginInput.name}
+                                            onChange={handleInput}
                                             required
                                             autoComplete="name"
                                             autoFocus
                                         />
-                                        {errors.name && (
-                                            <span className="invalid-feedback" role="alert">
-                                                <strong>{errors.name[0]}</strong>
-                                            </span>
-                                        )}
+                                        <span>{loginInput.error_list.email}</span>
                                     </div>
                                 </div>
 
-                                <label htmlFor="password" className="col-md-4 col-form-label font-weight-bold">Password</label>
+                                <label htmlFor='password' className="col-md-4 col-form-label font-weight-bold">Password</label>
                                 <div className="form-group row mt-2">
                                     <div className="w-certify-input mx-auto">
                                         <input
                                             id="password"
                                             type="password"
-                                            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                                            className={`form-control`}
                                             name="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
+                                            value={loginInput.password}
+                                            onChange={handleInput}
                                             required
                                             autoComplete="current-password"
                                         />
-                                        {errors.password && (
-                                            <span className="invalid-feedback" role="alert">
-                                                <strong>{errors.password[0]}</strong>
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="form-group row d-flex justify-content-end">
-                                    <div className="mr-4">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                name="remember"
-                                                id="remember"
-                                                checked={remember}
-                                                onChange={() => setRemember(!remember)}
-                                            />
-                                            <label className="form-check-label" htmlFor="remember">
-                                                Remember Me
-                                            </label>
-                                        </div>
+                                        <span>{loginInput.error_list.password}</span>
                                     </div>
                                 </div>
 
@@ -107,4 +99,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default Login;

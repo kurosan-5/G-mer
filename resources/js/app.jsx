@@ -4,14 +4,25 @@ import ReactDOM from 'react-dom/client';
 import Split from 'react-split';
 import Home from './components/Home';
 import Header from "./components/Header";
-import LoginForm from './components/auth/Login';
-import RegisterForm from './components/auth/Register';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import axios from 'axios';
+
+axios.defaults.baseURL = "http://gamer.test/";
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.post['Accept'] = 'application/json';
+axios.defaults.withCredentials = true;
+axios.interceptors.request.use(function(config){
+    const token = localStorage.getItem('auth_token');
+    config.headers.Authorization = token ? `Bearer ${token}` : '';
+    return config;
+});
 
 const App = () => {
     return (
         <>
             <Header />
-            <div>
+            <div className='mt-6'>
                 <Split
                     sizes={[85, 15]} // 各パネルの初期サイズ（パーセンテージ）
                     minSize={100} // パネルの最小サイズ
@@ -20,9 +31,9 @@ const App = () => {
                 >
                     <div>
                         <Routes>
-                            <Route path="/home" element={<Home />} />
-                            <Route path="/login_form" element={<LoginForm />} />
-                            <Route path="/register_form" element={<RegisterForm />} />
+                            <Route path="/" element={<Home />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
                         </Routes>
                     </div>
                     <div>
