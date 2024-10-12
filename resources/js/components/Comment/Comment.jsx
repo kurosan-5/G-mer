@@ -7,25 +7,13 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
 
-const CommentList = ({post}) => {
-    const [comments, setComments] = useState([]);
-    const [user, setUser] = useState({});
-
-    const getComments = async () => {
-        const response = await axios.get('/api/comments',{params: {post_id: post.id, user_id: post.user_id}});
-        setComments(response.data.comments);
-        setUser(response.data.user);
-    }
-
-    useEffect(() => {
-        getComments();
-    }, []);
+const CommentList = ({comments}) => {
 
     return(
         <>
         {comments && comments.map((comment) => {
             return(
-                <Comment key={comment.id} comment={comment} user={user}/>
+                <Comment key={comment.id} comment={comment}/>
             );
         })}
             
@@ -33,12 +21,13 @@ const CommentList = ({post}) => {
     );
 }
 
-const Comment = ({comment, user}) => {
+const Comment = ({comment}) => {
+
     return (
         <CardUI>
             <CardContent>
                 <TextUI variant="subtitle" component="div">
-                    {user.name}
+                    {comment.user.name}
                 </TextUI>
                 <TextUI variant="body1" component="div">
                     {comment.content}

@@ -15,11 +15,13 @@ class CommentController extends Controller
      */
     public function index(Request $request)
     {    
-         $comments = Comment::where('post_id', $request->post_id)->get();
-         $user = User::find($request->user_id);
+         $comments = Comment::with('user')->where('post_id', $request->post_id)->get();
+         $post_user = User::find($request->post_user_id);
+         $login_user_id = User::where('name', $request->login_user_name)->first();
          return response()->json([
-            'user' => $user,
-            'comments' => $comments
+            'post_user' => $post_user,
+            'comments' => $comments,
+            'login_user_id' => $login_user_id,
          ]);
     }
 
@@ -28,9 +30,24 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $request = $request->validate([
+            'content' => 'required|string|max:1024',
+            'user_id' => 'required|integer|exists:users,id',
+            'post_id' => 'required|integer|exists:posts,id',
+        ]);
+
+        $comment = Comment::create([
+            'content' => $request['content'],
+            'user_id' => $request['user_id'],
+            'post_id' => $request['post_id'],
+        ]);
+
+        return response()->json([
+            'comment' => $comment
+        ]);
+
     }
 
     /**
