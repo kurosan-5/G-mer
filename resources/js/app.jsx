@@ -1,12 +1,13 @@
 import React, { useState }  from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
 import ReactDOM from 'react-dom/client';
 import Split from 'react-split';
 import Home from './components/Home';
 import Header from "./components/Header";
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
-import axios from 'axios';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
+import ShowPost from "./components/Post/ShowPost";
 
 axios.defaults.baseURL = "http://gamer.test/";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -21,7 +22,7 @@ axios.interceptors.request.use(function(config){
 const App = () => {
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <div className='mt-6'>
                 <Split
                     sizes={[85, 15]} // 各パネルの初期サイズ（パーセンテージ）
@@ -34,6 +35,7 @@ const App = () => {
                             <Route path="/" element={<Home />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
+                            <Route path="/showPost" element={<ShowPost />} />
                         </Routes>
                     </div>
                     <div>
