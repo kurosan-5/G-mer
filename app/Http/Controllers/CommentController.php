@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -12,9 +13,14 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index(Request $request)
+    {    
+         $comments = Comment::where('post_id', $request->post_id)->get();
+         $user = User::find($request->user_id);
+         return response()->json([
+            'user' => $user,
+            'comments' => $comments
+         ]);
     }
 
     /**

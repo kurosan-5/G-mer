@@ -22,7 +22,7 @@ axios.interceptors.request.use(function(config){
 const App = () => {
     return (
         <>
-            {/* <Header /> */}
+            <Header />
             <div className='mt-6'>
                 <Split
                     sizes={[85, 15]} // 各パネルの初期サイズ（パーセンテージ）
