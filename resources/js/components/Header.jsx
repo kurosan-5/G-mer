@@ -51,7 +51,7 @@ const Header = () => {
     return(
         <nav className="p-0 navbar navbar-expand-lg h-color header shadow">
             <div className="container-fluid">
-                <Link to="/login_form">
+                <Link to="/">
                 <h2>GAMER</h2>
                 </Link>
             </div>
