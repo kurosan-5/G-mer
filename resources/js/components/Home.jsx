@@ -9,6 +9,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import MessageIcon from '@mui/icons-material/MessageOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import TextUI from './UIcomponents/Typography';
+import CardUI from './UIcomponents/Card';
 
 const PostList = () => {
     const [posts, setPosts] = useState([]);
@@ -35,7 +37,7 @@ const PostList = () => {
 const Post = ({post}) => {
     return (
         <Link to="/showPost" state={{post : post}}>
-            <Card sx={{ maxWidth: 345 }}>
+            <CardUI sx={{ maxWidth: 345 }}>
                 
                 {/* <CardMedia
                     sx={{ height: 140 }}
@@ -43,18 +45,18 @@ const Post = ({post}) => {
                     title="game1"
                 /> */}
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <TextUI gutterBottom variant="h5" component="div">
                         {post.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    </TextUI>
+                    <TextUI variant="body2" sx={{ color: 'text.secondary' }}>
                         {post.about}
-                    </Typography>
+                    </TextUI>
                     <MessageIcon />
                     {post.comments_count}
                     <FavoriteBorderIcon />
                     {post.like}
                 </CardContent>
-            </Card>
+            </CardUI>
         </Link>
     );
 }

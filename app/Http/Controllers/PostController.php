@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -83,4 +84,15 @@ class PostController extends Controller
     {
         return response();
     }
+    
+    public function get_user(Request $request)
+    {
+        $post_user = User::find($request->post_user_id);
+        $login_user_id = User::where('name', $request->login_user_name)->first();
+        return response()->json([
+            'post_user' => $post_user,
+            'login_user_id' => $login_user_id,
+        ]);
+    }
+
 }

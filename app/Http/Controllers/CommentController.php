@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Comment_Like;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,15 +15,16 @@ class CommentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {    
-         $comments = Comment::with('user')->where('post_id', $request->post_id)->get();
-         $post_user = User::find($request->post_user_id);
-         $login_user_id = User::where('name', $request->login_user_name)->first();
-         return response()->json([
-            'post_user' => $post_user,
+    {
+        $comments = Comment::with('user')->with('comment_likes.user')->where('post_id', $request->post_id)
+            ->withCount('comment_likes')->get();
+        $user = User::where('name', $request->auth_user_name)->first();
+        $likes = Comment_Like::where('user_id', $user->id)->get();
+
+        return response()->json([
             'comments' => $comments,
-            'login_user_id' => $login_user_id,
-         ]);
+            'likes' => $likes,
+        ]);
     }
 
     /**
@@ -32,7 +34,7 @@ class CommentController extends Controller
      */
     public function create(Request $request)
     {
-        $request = $request->validate([
+        $request->validate([
             'content' => 'required|string|max:1024',
             'user_id' => 'required|integer|exists:users,id',
             'post_id' => 'required|integer|exists:posts,id',
@@ -93,6 +95,23 @@ class CommentController extends Controller
     public function update(Request $request, Comment $comment)
     {
         //
+        try {
+
+            $request->validate([
+                'content' => 'required|string|max:1024',
+            ]);
+
+
+            $comment->content = $request->input('content');
+            $comment->save();
+
+            return response()->json([
+                'message' => 'edited'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e]);
+        }
+
     }
 
     /**
@@ -104,5 +123,9 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         //
+        $comment->delete();
+        return response()->json([
+            'message' => 'deleted'
+        ]);
     }
 }

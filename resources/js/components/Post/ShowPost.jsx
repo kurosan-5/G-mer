@@ -5,7 +5,7 @@ import CardUI from "../UIcomponents/Card";
 import CardContent from '@mui/material/CardContent';
 import { CardMedia, Paper, TextField, Typography } from "@mui/material";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Button } from "@mui/material"; ''
+import { Button } from "@mui/material";
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
@@ -13,19 +13,18 @@ import { useEffect, useState } from "react";
 import Modal from '@mui/material/Modal';
 
 const ShowPost = () => {
-    const location = useLocation();
-    const { post } = location.state;
-
+    
     return (
         <>
-            <DetailPost post={post} />
+            <DetailPost/>
         </>
     );
 };
 
-const DetailPost = ({ post }) => {
+const DetailPost = () => {
+    const post_location = useLocation();
+    const { post } = post_location.state;
 
-    const [comments, setComments] = useState([]);
     const [post_user, setPostUser] = useState({});
     const [login_user_id, setLoginUserId] = useState(0);
     const [open, setOpen] = useState(false);
@@ -33,10 +32,9 @@ const DetailPost = ({ post }) => {
 
     const getDatas = async () => {
         const login_user_name = localStorage.getItem('auth_name')
-        const response = await axios.get('/api/comments', { params: { post_id: post.id, post_user_id: post.user_id, login_user_name: login_user_name } });
-        setComments(response.data.comments);
-        setPostUser(response.data.post_user);
-        setLoginUserId(response.data.login_user_id.id);
+        const response_user = await axios.get('/api/posts/get_user', { params: {post_user_id: post.user_id, login_user_name: login_user_name } });
+        setPostUser(response_user.data.post_user);
+        setLoginUserId(response_user.data.login_user_id.id);
     }
 
     const handleCreateCommentButton = () => {
@@ -98,7 +96,7 @@ const DetailPost = ({ post }) => {
                     <AddIcon sx={{ mr: 1 }} />
                     Comment
                 </Fab>
-                <CommentList comments={comments} />
+                <CommentList post={post} />
 
                 <ShowModal open={open} handleClose={(e) => setOpen(false)} input={inputComment} set={setInputComment} handleCommentPost={handleCommentPost}/>
             </div>
@@ -116,11 +114,11 @@ const ShowModal = ({ open, handleClose, input, set, handleCommentPost }) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <div className="d-flex justify-content-center align-items-center mt-5">
+                <div className="d-flex justify-content-center align-items-center mt-5 flex-column">
                     <TextField
-                        className="bg-secondary w-25"
+                        className="bg-white w-25"
                         multiline rows={4} id="outlined-basic"
-                        label="conetnt"
+                        label="コメントを書いてみよう"
                         value={input}
                         onChange={(e) => set(e.target.value)}
                         variant="outlined" />
