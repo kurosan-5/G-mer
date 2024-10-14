@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import ShowPost from "./components/Post/ShowPost";
+import InputForm from './components/InputForm';
 
 axios.defaults.baseURL = "http://gamer.test/";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -18,7 +19,6 @@ axios.interceptors.request.use(function(config){
     config.headers.Authorization = token ? `Bearer ${token}` : '';
     return config;
 });
-import InputForm from './components/InputForm';
 
 const App = () => {
     return (
@@ -28,7 +28,7 @@ const App = () => {
                 <Split
                     sizes={[85, 15]} // 各パネルの初期サイズ（パーセンテージ）
                     minSize={100} // パネルの最小サイズ
-                    gutterSize={10} // パネル間のスペース
+                    gutterSize={5} // パネル間のスペース
                     className="d-flex" // Flexboxを使用する
                 >
                     <div>
@@ -36,6 +36,7 @@ const App = () => {
                             <Route path="/" element={<Home />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
+                            <Route path="/input" element={<InputForm />}/>
                             <Route path="/showPost" element={<ShowPost />} />
                         </Routes>
                     </div>

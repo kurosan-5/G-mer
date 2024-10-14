@@ -25,6 +25,11 @@ class Post extends Model
     public function play_records(){
         return $this->hasMany(Play_record::class);
     }
+    
+    public function likes(){
+        return $this->hasMany(Post_Like::class);
+    }
+
 
 
 }

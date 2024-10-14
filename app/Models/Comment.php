@@ -19,7 +19,7 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function comment_likes(){
+    public function likes(){
         return $this->hasMany(Comment_Like::class);
     }
 

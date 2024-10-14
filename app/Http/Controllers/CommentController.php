@@ -16,8 +16,8 @@ class CommentController extends Controller
      */
     public function index(Request $request)
     {
-        $comments = Comment::with('user')->with('comment_likes.user')->where('post_id', $request->post_id)
-            ->withCount('comment_likes')->get();
+        $comments = Comment::with('user')->with('likes.user')->where('post_id', $request->post_id)
+            ->withCount('likes')->get();
         $user = User::where('name', $request->auth_user_name)->first();
         $likes = Comment_Like::where('user_id', $user->id)->get();
 

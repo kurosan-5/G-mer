@@ -8,6 +8,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Button, CardActions, TextField } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import Hukidashi from '../UIcomponents/Tooltip';
+import FavoriteField from '../UIcomponents/FavoriteField';
 
 
 
@@ -43,27 +44,14 @@ const CommentList = ({ post }) => {
 }
 
 const Comment = ({ comment, auth_user_name, likes }) => {
-    let islike = false;
 
-    likes && likes.map((like) => {
-        if (like.comment_id == comment.id) {
-            islike = true;
-        }
-    })
-
-    let users = '';
-    {
-        comment.comment_likes && comment.comment_likes.map((comment_like) => {
-            users += comment_like.user.name + 'さん　';
-        })
+    const data = {
+        comment_id: comment.id,
+        auth_user_name: auth_user_name
     }
-    users += 'がいいね！しています。'
 
     const [isEdit, setIsEdit] = useState(false);
     const [inputEditText, setInputEditText] = useState(comment.content);
-    const [like_num, setLikeNum] = useState(comment.comment_likes_count);
-    const [isLiked, setIsLiked] = useState(islike);
-
     const handleEditButton = () => {
         setIsEdit(true);
     };
@@ -81,20 +69,8 @@ const Comment = ({ comment, auth_user_name, likes }) => {
             location.reload();
         }
     };
-    const handleFavorite = async () => {
-        setIsLiked(true);
-        const r = await axios.post('api/likes_c/store', { comment_id: comment.id, auth_user_name: auth_user_name })
-        setLikeNum(like_num + 1)
-    }
-
-    const handleRemoveFavorite = async () => {
-        setIsLiked(false);
-        const r = await axios.post('api/likes_c/delete', { comment_id: comment.id, auth_user_name: auth_user_name })
-        setLikeNum(like_num - 1)
-
-    }
-
     const canEditOrDelete = localStorage.getItem('auth_name') === comment.user.name;
+
     return (
         <CardUI className="d-flex justify-content-between">
             <CardContent>
@@ -116,41 +92,7 @@ const Comment = ({ comment, auth_user_name, likes }) => {
                         {comment.content}
                     </TextUI>
                 )}
-                <Hukidashi arrow title={users} placement='bottom'>
-                    {comment.comment_likes.length ? (
-                        <div>
-                            {isLiked ? (
-                                <IconButton aria-label="add to favorites" onClick={() => handleRemoveFavorite()}>
-                                    <FavoriteIcon color="red" />
-                                </IconButton>
-                            ) : (
-                                <IconButton aria-label="add to favorites" onClick={() => handleFavorite()}>
-                                    <FavoriteBorderIcon />
-                                </IconButton>
-                            )}
-                            <TextUI variant="caption" component="span">
-                                {like_num}
-                            </TextUI>
-                        </div>
-                    ) : (
-                        <>
-                            {isLiked ? (
-                                <IconButton aria-label="add to favorites" onClick={() => handleRemoveFavorite()}>
-                                    <FavoriteIcon color="red" />
-                                </IconButton>
-                            ) : (
-                                <IconButton aria-label="add to favorites" onClick={() => handleFavorite()}>
-                                    <FavoriteBorderIcon />
-                                </IconButton>
-                            )}
-                            <TextUI variant="caption" component="span">
-                                {like_num}
-                            </TextUI>
-                        
-                        </>
-
-                    )}
-                </Hukidashi>
+                <FavoriteField item={comment} likes={likes} url='api/likes_c' data={data}/>
                 
             </CardContent>
             <CardActions>

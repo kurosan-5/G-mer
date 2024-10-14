@@ -21,7 +21,7 @@ class PostLikeController extends Controller
         $request->validate([
             'post_id' => 'required|exists:posts,id'
         ]);
-        $user = User::find(1);
+        $user = User::where('name', $request->auth_user_name)->first();
         $user->post_like($request->post_id);
         return response()->json(['message' => 'liked']);
     }
@@ -29,13 +29,12 @@ class PostLikeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Like  $like
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
         //
-        $user = User::find(1);
+        $user = User::where('name', $request->auth_user_name)->first();
         $user->post_unlike($request->post_id);
         return response()->json(['message' => 'unliked']);
     }

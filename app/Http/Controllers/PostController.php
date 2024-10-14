@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Post_Like;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,10 +14,16 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::withCount('comments')->get();
-        return response()->json(['posts' => $posts]);
+        $posts = Post::withCount('comments')->with('likes.user')
+            ->withCount('likes')->get();
+        $user = User::where('name', $request->auth_user_name)->first();
+        $likes = Post_Like::where('user_id', $user->id)->get();
+        return response()->json([
+            'posts' => $posts,
+            'likes' => $likes,
+        ]);
     }
 
     /**
@@ -92,7 +99,7 @@ class PostController extends Controller
     {
         return response();
     }
-    
+
     public function get_user(Request $request)
     {
         $post_user = User::find($request->post_user_id);
