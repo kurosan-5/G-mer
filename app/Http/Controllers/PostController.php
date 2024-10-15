@@ -44,15 +44,23 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = new Post;
-        $post->title = $request->title;
-        $post->about = $request->about;
-        $post->description = $request->description;
-        $post->like = 0;
-        $post->image_path = $request->imagePath;
-        $post->file_path = $request->filePath;
-        $post->save();
-        return response();
+        try{
+            $post = new Post;
+            $post->title = $request->title;
+            $post->about = $request->about;
+            $post->description = $request->description;
+            $post->like = 0;
+            $post->image_path = $request->imagePath;
+            $post->file_path = $request->filePath;
+            $post->save();
+            return response()->json([
+                'message' => 'post created'
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e
+            ]);
+        }
     }
 
     /**

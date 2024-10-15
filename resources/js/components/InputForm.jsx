@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, TextField, Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import TextUI from './UIcomponents/Typography';
 
 const InputForm = () => {
     const [data, setData] = useState();
@@ -41,10 +42,10 @@ const InputForm = () => {
 
     const submit = async()=>{
         console.log(data)
-        await axios.post('/api/posts',data)
+        const response = await axios.post('/api/posts',data)
         .then((res) => {
-            setData('');
-            navigate('/home');
+            console.log(res.data.message)
+            navigate('/');
         }).catch(error => {
             console.log(error);
         });
@@ -57,12 +58,14 @@ const InputForm = () => {
                 <TextField label="ゲーム名" name="title" variant="outlined" fullWidth />
                 <TextField label="簡単な説明" name="about" variant="outlined" fullWidth multiline rows={4} sx={{ marginTop: '16px' }}/>
                 <TextField label="説明" name="description" variant="outlined" fullWidth multiline rows={4} sx={{ marginTop: '16px' }} />
+                <TextUI variant="body2" componend="span">ゲームプログラムをアップロード</TextUI>
                 <input
                     name="filePath"
                     type="file"
                     accept=".js" // アップロード可能なファイルの拡張子を指定
                     style={{ marginTop: '16px' }}
                 />
+                <TextUI variant="body2" componend="span">サムネイル画像をアップロード</TextUI>
                 <input
                     name="imagePath"
                     type="file"
