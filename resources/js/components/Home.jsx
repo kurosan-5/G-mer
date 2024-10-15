@@ -19,9 +19,9 @@ const Home = () => {
                     aria-label="add"
                     onClick={handleClick}
                     sx={{
-                        position: 'absolute',
-                        bottom: 16,
-                        right: 16,
+                        position: 'fixed',
+                        bottom: 32,
+                        right: 32,
                         padding: '8px',
                         width: '200px', // 幅を設定
                         height: '50px', // 高さを設定

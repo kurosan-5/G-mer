@@ -36373,7 +36373,7 @@ axios__WEBPACK_IMPORTED_MODULE_1___default().interceptors.request.use(function (
 var App = function App() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Header__WEBPACK_IMPORTED_MODULE_5__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-      className: "mt-5",
+      className: "mt-6",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_split__WEBPACK_IMPORTED_MODULE_3__["default"], {
         sizes: [85, 15] // 各パネルの初期サイズ（パーセンテージ）
         ,
@@ -37092,9 +37092,9 @@ var Home = function Home() {
         "aria-label": "add",
         onClick: handleClick,
         sx: {
-          position: 'absolute',
-          bottom: 16,
-          right: 16,
+          position: 'fixed',
+          bottom: 32,
+          right: 32,
           padding: '8px',
           width: '200px',
           // 幅を設定

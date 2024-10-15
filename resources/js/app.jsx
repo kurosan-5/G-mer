@@ -24,7 +24,7 @@ const App = () => {
     return (
         <>
             <Header />
-            <div className='mt-5'>
+            <div className='mt-6'>
                 <Split
                     sizes={[85, 15]} // 各パネルの初期サイズ（パーセンテージ）
                     minSize={100} // パネルの最小サイズ
