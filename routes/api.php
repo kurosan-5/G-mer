@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\CommentLikeController;
 use Illuminate\Http\Request;
@@ -38,6 +39,8 @@ Route::post('likes_c/delete', [CommentLikeController::class, 'destroy']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('get-game',[GameController::class, 'index']);
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);

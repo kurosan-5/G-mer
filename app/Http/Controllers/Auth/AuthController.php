@@ -14,7 +14,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:191',
+            'name' => 'required|max:191|unique:users,name',
             'email' => 'required|email|max:191|unique:users,email',
             'password' => 'required|min:5',
         ]);
@@ -55,9 +55,9 @@ class AuthController extends Controller
         } else {
             $user = User::where('name', $request->name)->first();
             if (!$user || !Hash::check($request->password, $user->password)) {
-                return response()->json([
+                return response()->json([ 
                     'status' => 401,
-                    'message' => '入力情報が不正です',
+                    'message' => 'ユーザー名またはパスワードが違います',
                 ]);
             } else {
                 $token = $user->createToken($user->email . '_Token')->plainTextToken;

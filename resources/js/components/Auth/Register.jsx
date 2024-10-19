@@ -22,9 +22,18 @@ const Register = () => {
             [name]: value,
         });
     };
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
+
+
+        if(formData.password != formData.password_confirmation){
+            setFormData({ ...formData, error_list: {
+                "confirmation" : "The Password and Confirm Password do not match."
+            } })
+            return;
+        }
+
 
         const data = {
             name: formData.name,
@@ -34,19 +43,19 @@ const Register = () => {
 
         axios.get('/sanctum/csrf-cookie').then(response => {
             axios.post(`/api/register`, data).then(res => {
-                if(res.data.status === 200){
+                if (res.data.status === 200) {
                     localStorage.setItem('auth_token', res.data.token);
                     localStorage.setItem('auth_name', res.data.username);
                     navigate('/');
                 } else {
-                    setFormData({...formData, error_list: res.data.validation_errors})
+                    setFormData({ ...formData, error_list: res.data.validation_errors })
                 }
             });
         });
     };
 
     return (
-        <div className="container">
+        <div className="container mt-6">
             <div className="row justify-content-center">
                 <div className="col-md-6">
                     <div className="card mt-5 shadow">
@@ -66,7 +75,8 @@ const Register = () => {
                                             autoComplete="name"
                                             autoFocus
                                         />
-                                        <span>{formData.error_list.email}</span>
+                                        <span className='text-danger'><strong>{formData.error_list.name}</strong></span>
+
                                     </div>
                                 </div>
 
@@ -83,7 +93,8 @@ const Register = () => {
                                             required
                                             autoComplete="email"
                                         />
-                                        <span>{formData.error_list.email}</span>
+                                        <span className='text-danger'><strong>{formData.error_list.email}</strong></span>
+
                                     </div>
                                 </div>
 
@@ -100,7 +111,8 @@ const Register = () => {
                                             required
                                             autoComplete="new-password"
                                         />
-                                        <span>{formData.error_list.email}</span>
+                                        <span className='text-danger'><strong>{formData.error_list.password}</strong></span>
+                                        <span className='text-danger'><strong>{formData.error_list.confirmation}</strong></span>
                                     </div>
                                 </div>
 

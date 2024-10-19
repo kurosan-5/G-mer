@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import ReactDOM from 'react-dom/client';
@@ -9,12 +9,14 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import ShowPost from "./components/Post/ShowPost";
 import InputForm from './components/InputForm';
+import Game from './components/Game/Game';
+import Welcome from './components/Welcome';
 
 axios.defaults.baseURL = "http://gamer.test/";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Accept'] = 'application/json';
 axios.defaults.withCredentials = true;
-axios.interceptors.request.use(function(config){
+axios.interceptors.request.use(function (config) {
     const token = localStorage.getItem('auth_token');
     config.headers.Authorization = token ? `Bearer ${token}` : '';
     return config;
@@ -24,27 +26,23 @@ const App = () => {
     return (
         <>
             <Header />
-            <div className='mt-6'>
-                <Split
-                    sizes={[85, 15]} // 各パネルの初期サイズ（パーセンテージ）
-                    minSize={100} // パネルの最小サイズ
-                    gutterSize={5} // パネル間のスペース
-                    className="d-flex" // Flexboxを使用する
-                >
-                    <div>
-                        <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/input" element={<InputForm />}/>
-                            <Route path="/showPost" element={<ShowPost />} />
-                        </Routes>
-                    </div>
-                    <div>
-                        ランキング
-                    </div>
-                </Split>
-            </div>
+            {localStorage.getItem('auth_token') ? (
+                <div className='mt-6'>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/input" element={<InputForm />} />
+                        <Route path="/showPost" element={<ShowPost />} />
+                        <Route path="/play" element={<Game />} />
+                    </Routes>
+                </div>
+            ) : (
+
+                <Routes>
+                    <Route path="/" element={<Welcome />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                </Routes>
+            )}
         </>
     );
 };

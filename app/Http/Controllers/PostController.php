@@ -6,6 +6,9 @@ use App\Models\Post;
 use App\Models\Post_Like;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
+use Str;
 
 class PostController extends Controller
 {
@@ -18,6 +21,12 @@ class PostController extends Controller
     {
         $posts = Post::withCount('comments')->with('likes.user')
             ->withCount('likes')->get();
+
+        //postsの暗号化されたファイルへのリンクを作成。
+        foreach ($posts as $post) {
+            $post->imageUrl = Storage::url($post->image_path);
+            $post->htmlUrl = Storage::url($post->file_path);
+        }
         $user = User::where('name', $request->auth_user_name)->first();
         $likes = Post_Like::where('user_id', $user->id)->get();
         return response()->json([
@@ -44,22 +53,50 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
+            // ZIPファイルを保存
+            $zipFile = $request->file('fileInput');
+             $fileName = time() . '_' . $zipFile->getClientOriginalName();
+            // フォルダ名をランダムな文字列に暗号化
+            $randomFolderName = Str::random(40);
+            // 解凍先のパスを設定
+            $extractPath = storage_path('app/public/unzipped/' . $randomFolderName);
+
+            $zipPath = $zipFile->storeAs('uploads', $randomFolderName);
+            $extractRelativePath = 'unzipped/' . $randomFolderName;
+
+            // ファイルを解凍
+            $zip = new ZipArchive;
+            if ($zip->open(storage_path('app/' . $zipPath)) === TRUE) {
+                $extractPath = storage_path('app/public/unzipped/' . pathinfo($randomFolderName, PATHINFO_FILENAME));
+                $zip->extractTo($extractPath);
+                $zip->close();
+                $zipFilePath = storage_path('app/uploads/'.$randomFolderName);
+                unlink($zipFilePath);
+            } else {
+                return response()->json(['error' => 'Failed to open ZIP file'], 500);
+            }
+            $user = User::where('name', $request->input('auth_user_name'))->first();
+            $image_file = $request->file('imageInput');
+            $image_path = $image_file->store('uploads/image', 'public');
             $post = new Post;
-            $post->title = $request->title;
-            $post->about = $request->about;
-            $post->description = $request->description;
+            $post->user_id = $user->id;
+            $post->title = $request->input('title');
+            $post->about = $request->input('about');
+            $post->description = $request->input('description');
             $post->like = 0;
-            $post->image_path = $request->imagePath;
-            $post->file_path = $request->filePath;
+            $post->image_path = $image_path;
+            $post->file_path = $extractRelativePath;
             $post->save();
+
             return response()->json([
                 'message' => 'post created'
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
-                'error' => $e
-            ]);
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -105,7 +142,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        return response();
+        $post->delete();
+
+        return response()->json([
+            'message' => 'post deleted'
+        ]);
     }
 
     public function get_user(Request $request)

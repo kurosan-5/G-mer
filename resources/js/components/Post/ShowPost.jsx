@@ -1,8 +1,8 @@
-import { useLocation } from "react-router-dom";
+import { Link,useLocation, useNavigate } from "react-router-dom";
 import CommentList from "../Comment/Comment";
 import TextUI from "../UIcomponents/Typography";
 import CardContent from '@mui/material/CardContent';
-import { CardMedia, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,6 +10,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Modal from '@mui/material/Modal';
 import FavoriteField from "../UIcomponents/FavoriteField";
+import CardMedia from '@mui/material/CardMedia'
+
 
 const ShowPost = () => {
 
@@ -22,6 +24,7 @@ const ShowPost = () => {
 
 const DetailPost = () => {
 
+    const navigate = useNavigate();
     const post_location = useLocation();
     const { post, likes } = post_location.state;
     const auth_user_name = localStorage.getItem('auth_name');
@@ -31,9 +34,21 @@ const DetailPost = () => {
     const [open, setOpen] = useState(false);
     const [inputComment, setInputComment] = useState('');
 
+
+    const canDelete = localStorage.getItem('auth_name') === post_user.name;
+
+
     const data = {
         post_id: post.id,
         auth_user_name: auth_user_name
+    }
+
+    const handleDeletePost = async () => {
+        const deleteConfirm = confirm(`本当にこの投稿を削除しますか？`);
+        if (deleteConfirm) {
+            await axios.delete(`api/posts/${post.id}`);
+            navigate('/');
+        }
     }
 
     const getDatas = async () => {
@@ -59,6 +74,8 @@ const DetailPost = () => {
         location.reload();
     }
 
+
+
     useEffect(() => {
         getDatas();
     }, [])
@@ -67,11 +84,12 @@ const DetailPost = () => {
         <>
             <div className="shadow p-5 m-5">
                 <CardContent>
-                    {/* <CardMedia
-                        sx={{ height: 140 }}
-                        image={post.image_path}
+                    <CardMedia
+                        sx={{ height: 300, width:300}}
+                        image={post.imageUrl}
                         title="game1"
-                        /> */}
+                        className="d-block mx-auto"
+                        />
                     <Typography variant='h5' component='h5'>
                         {post.title}
                     </Typography>
@@ -81,7 +99,19 @@ const DetailPost = () => {
                     <TextUI variant='body1' component='div'>
                         {post.description}
                     </TextUI>
-                    <Button variant="contained">Play</Button>
+                    <Link to='/play' state={{ post: post}}>
+                        <Button variant="contained">Play</Button>
+                    
+                    </Link>
+                    {canDelete ? (
+                        <Box display="flex" justifyContent='flex-end'>
+                            <Button variant="outlined" color="error" onClick={() => {handleDeletePost()}}>このポストを削除</Button>
+                        </Box>
+
+                    ) : (
+                        <>
+                        </>
+                    )}
                 </CardContent>
                 <Fab
                     variant="extended"
@@ -95,7 +125,7 @@ const DetailPost = () => {
                     }}
                 >
                     <AddIcon sx={{ mr: 1 }} />
-                    Comment
+                    コメント
                 </Fab>
                 <CommentList post={post} />
 
@@ -123,7 +153,7 @@ const ShowModal = ({ open, handleClose, input, set, handleCommentPost }) => {
                         value={input}
                         onChange={(e) => set(e.target.value)}
                         variant="outlined" />
-                    <Button variant="contained" onClick={() => handleCommentPost(input)}>Comment</Button>
+                    <Button variant="contained" onClick={() => handleCommentPost(input)}>コメントする</Button>
                 </div>
 
             </Modal>

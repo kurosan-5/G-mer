@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 
 const Login = () => {
@@ -33,6 +34,9 @@ const Login = () => {
                     navigate('/');
                     location.reload();
                 } else if (res.data.status === 401){
+                    setLogin({...loginInput, error_list: {
+                        "not_verify": res.data.message
+                    }});
                     
                 } else {
                     setLogin({...loginInput, error_list: res.data.validation_errors});
@@ -42,11 +46,11 @@ const Login = () => {
     };
 
     return (
-        <div className="container">
+        <div className="container mt-6">
             <div className="row justify-content-center">
                 <div className="col-md-6">
                     <div className="card mt-5 shadow">
-                        <div className="card-body">
+                        <div className="card-body ps-4">
                             <form onSubmit={handleSubmit}>
                                 <label htmlFor='name' className="col-form-label font-weight-bold">Name</label>
                                 <div className="form-group row mt-2">
@@ -62,7 +66,9 @@ const Login = () => {
                                             autoComplete="name"
                                             autoFocus
                                         />
-                                        <span>{loginInput.error_list.email}</span>
+                                        <span className='text-danger'><strong>{loginInput.error_list.name}</strong></span>
+                                        <span className='text-danger'><strong>{loginInput.error_list.not_verify}</strong></span>
+
                                     </div>
                                 </div>
 
@@ -79,11 +85,11 @@ const Login = () => {
                                             required
                                             autoComplete="current-password"
                                         />
-                                        <span>{loginInput.error_list.password}</span>
+                                        <span className='text-danger'><strong>{loginInput.error_list.password}</strong></span>
                                     </div>
                                 </div>
 
-                                <div className="form-group row mb-0">
+                                <div className="form-group row mb-0 mt-3">
                                     <div className="w-100 text-center">
                                         <button type="submit" className="btn light-lara-btn w-certify-input font-weight-bold">
                                             Login

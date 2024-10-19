@@ -14048,4 +14048,43 @@ a:hover {
   background-color: #e2e2e2;
 }
 
+.fade-in-body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("https://cdn.pixabay.com/photo/2015/10/30/20/13/sea-1014710_1280.jpg");
+  background-size: cover;
+  background-position: center;
+  animation-name: fadein;
+  animation-duration: 4s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.fade-in-body::before {
+  background-color: rgba(0, 0, 0, 0.082);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  content: "";
+}
+
+.header-bg {
+  background-color: rgba(253, 253, 253, 0.858);
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 

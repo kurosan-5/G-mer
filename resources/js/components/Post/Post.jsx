@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia'
 import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid2';
 import MessageIcon from '@mui/icons-material/MessageOutlined';
@@ -10,7 +11,6 @@ import MessageIcon from '@mui/icons-material/MessageOutlined';
 import TextUI from '../UIcomponents/Typography';
 import CardUI from '../UIcomponents/Card';
 import FavoriteField from '../UIcomponents/FavoriteField';
-
 
 const PostList = () => {
     const [posts, setPosts] = useState([]);
@@ -25,6 +25,7 @@ const PostList = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
     return (
         <Grid container spacing={2}>
             {posts && posts.map((item, index) => (
@@ -48,11 +49,11 @@ const Post = ({ post, likes, auth_user_name }) => {
         <CardUI sx={{ maxWidth: 345 }}>
             <Link to="/showPost" state={{ post: post, likes: likes }}>
 
-                {/* <CardMedia
+                <CardMedia
                     sx={{ height: 140 }}
-                    image={post.image_path}
+                    image={post.imageUrl}
                     title="game1"
-                /> */}
+                />
                 <CardContent>
                     <TextUI gutterBottom variant="h5" component="div">
                         {post.title}
