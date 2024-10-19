@@ -63,6 +63,7 @@ const DetailPost = () => {
     }
 
     const handleCommentPost = async (content) => {
+
         const commentData = {
             params: {
                 content: content,
@@ -70,8 +71,14 @@ const DetailPost = () => {
                 post_id: post.id,
             }
         }
-        await axios.get('/api/comments/create', commentData);
-        location.reload();
+
+        await axios.get('/api/comments/create', commentData)
+        .then(res => {
+            location.reload();
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
 
@@ -101,7 +108,7 @@ const DetailPost = () => {
                     </TextUI>
                     <Link to='/play' state={{ post: post}}>
                         <Button variant="contained">Play</Button>
-                    
+
                     </Link>
                     {canDelete ? (
                         <Box display="flex" justifyContent='flex-end'>

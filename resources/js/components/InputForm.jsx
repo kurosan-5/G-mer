@@ -10,19 +10,20 @@ const InputForm = () => {
     const [message, setMessage] = useState('');
     const [imagemessage, setImageMessage] = useState('');
     const navigate = useNavigate();
-    const [imagePreview, setImagePreview] = useState(null); // 画像のプレビュー用状態
+    const [imagePreview, setImagePreview] = useState(null);
+    const [originFileName, setOriginFileName] = useState('');
 
     const handleFileChange = (event) => {
         if (event.target.files && event.target.files.length > 0) {
             const selectedFile = event.target.files[0];
-            setFile(selectedFile); // ファイルの状態を更新
+            setFile(selectedFile);
 
             // 画像プレビューを表示
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImagePreview(reader.result); // プレビューを設定
+                setImagePreview(reader.result);
             };
-            reader.readAsDataURL(selectedFile); // 画像をデータURLとして読み込む
+            reader.readAsDataURL(selectedFile);
         }
     };
 
@@ -30,7 +31,7 @@ const InputForm = () => {
         let title = document.forms.input.title.value;
         let about = document.forms.input.about.value;
         let description = document.forms.input.description.value;
-        //dataをオブジェクトにしてセット
+
         setData({
             title: title,
             about: about,
@@ -44,14 +45,21 @@ const InputForm = () => {
         let imageInput = document.forms.input.imagePath.files[0];
         data.auth_user_name = auth_user_name
 
+        let notSelected = false;
+
         if (!fileInput) {
-            if (!imageInput) {
-                setImageMessage('画像を選択してください');
-            }
             setMessage('ファイルを選択してください');
-            return;
+            notSelected = true;
         }
 
+        // if (!imageInput) {
+        //     setImageMessage('画像を選択してください');
+        //     notSelected = true;
+        // }
+
+        if(notSelected){
+            return
+        }
 
         const formData = new FormData();
         formData.append('title', data.title);
@@ -67,6 +75,8 @@ const InputForm = () => {
             }
         })
             .then((res) => {
+                setOriginFileName(res.data.originFileName)
+                console.log(res.data.originFileName);
                 navigate('/');
             }).catch(error => {
                 if (error.response) {

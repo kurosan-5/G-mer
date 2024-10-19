@@ -23,7 +23,7 @@ const Game = () => {
 
     return (
         <div className="text-center">
-            <iframe src={`${post.htmlUrl}/âeâgâèâX/home.html`} width='1000' height='800' scrolling="no"></iframe>
+            <iframe src={`${post.htmlUrl}/index.html`} width='1000' height='800' scrolling="no"></iframe>
             <Link to="/showPost" state={{ post: post, likes: likes }}>
             <Button variant="contained" className='ms-5'>戻る</Button>
             </Link>

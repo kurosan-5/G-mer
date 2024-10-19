@@ -34,21 +34,31 @@ class CommentController extends Controller
      */
     public function create(Request $request)
     {
-        $request->validate([
-            'content' => 'required|string|max:1024',
-            'user_id' => 'required|integer|exists:users,id',
-            'post_id' => 'required|integer|exists:posts,id',
-        ]);
 
-        $comment = Comment::create([
-            'content' => $request['content'],
-            'user_id' => $request['user_id'],
-            'post_id' => $request['post_id'],
-        ]);
+        try{
 
-        return response()->json([
-            'comment' => $comment
-        ]);
+            $request->validate([
+                'content' => 'required|string|max:1024',
+                'user_id' => 'required|integer|exists:users,id',
+                'post_id' => 'required|integer|exists:posts,id',
+            ]);
+
+
+
+            $comment = Comment::create([
+                'content' => $request['content'],
+                'user_id' => $request['user_id'],
+                'post_id' => $request['post_id'],
+            ]);
+
+            return response()->json([
+                'comment' => $comment
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
 
     }
 

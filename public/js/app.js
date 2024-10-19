@@ -36846,6 +36846,7 @@ var Register = function Register() {
           localStorage.setItem('auth_token', res.data.token);
           localStorage.setItem('auth_name', res.data.username);
           navigate('/');
+          location.reload();
         } else {
           setFormData(_objectSpread(_objectSpread({}, formData), {}, {
             error_list: res.data.validation_errors
@@ -37274,7 +37275,7 @@ var Game = function Game() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "text-center",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("iframe", {
-      src: "".concat(post.htmlUrl, "/\xE2e\xE2g\xE2\xE8\xE2X/home.html"),
+      src: "".concat(post.htmlUrl, "/index.html"),
       width: "1000",
       height: "800",
       scrolling: "no"
@@ -37508,26 +37509,28 @@ var InputForm = function InputForm() {
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState10 = _slicedToArray(_useState9, 2),
     imagePreview = _useState10[0],
-    setImagePreview = _useState10[1]; // 画像のプレビュー用状態
-
+    setImagePreview = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState12 = _slicedToArray(_useState11, 2),
+    originFileName = _useState12[0],
+    setOriginFileName = _useState12[1];
   var handleFileChange = function handleFileChange(event) {
     if (event.target.files && event.target.files.length > 0) {
       var selectedFile = event.target.files[0];
-      setFile(selectedFile); // ファイルの状態を更新
+      setFile(selectedFile);
 
       // 画像プレビューを表示
       var reader = new FileReader();
       reader.onloadend = function () {
-        setImagePreview(reader.result); // プレビューを設定
+        setImagePreview(reader.result);
       };
-      reader.readAsDataURL(selectedFile); // 画像をデータURLとして読み込む
+      reader.readAsDataURL(selectedFile);
     }
   };
   var inputData = function inputData() {
     var title = document.forms.input.title.value;
     var about = document.forms.input.about.value;
     var description = document.forms.input.description.value;
-    //dataをオブジェクトにしてセット
     setData({
       title: title,
       about: about,
@@ -37536,7 +37539,7 @@ var InputForm = function InputForm() {
   };
   var submit = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var auth_user_name, fileInput, imageInput, formData;
+      var auth_user_name, fileInput, imageInput, notSelected, formData;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -37544,14 +37547,20 @@ var InputForm = function InputForm() {
             fileInput = document.forms.input.filePath.files[0];
             imageInput = document.forms.input.imagePath.files[0];
             data.auth_user_name = auth_user_name;
-            if (fileInput) {
+            notSelected = false;
+            if (!fileInput) {
+              setMessage('ファイルを選択してください');
+              notSelected = true;
+            }
+
+            // if (!imageInput) {
+            //     setImageMessage('画像を選択してください');
+            //     notSelected = true;
+            // }
+            if (!notSelected) {
               _context.next = 8;
               break;
             }
-            if (!imageInput) {
-              setImageMessage('画像を選択してください');
-            }
-            setMessage('ファイルを選択してください');
             return _context.abrupt("return");
           case 8:
             formData = new FormData();
@@ -37567,6 +37576,8 @@ var InputForm = function InputForm() {
                 'Content-Type': 'multipart/form-data'
               }
             }).then(function (res) {
+              setOriginFileName(res.data.originFileName);
+              console.log(res.data.originFileName);
               navigate('/');
             })["catch"](function (error) {
               if (error.response) {
@@ -37994,10 +38005,12 @@ var DetailPost = function DetailPost() {
               }
             };
             _context3.next = 3;
-            return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/comments/create', commentData);
+            return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/comments/create', commentData).then(function (res) {
+              location.reload();
+            })["catch"](function (error) {
+              console.log(error);
+            });
           case 3:
-            location.reload();
-          case 4:
           case "end":
             return _context3.stop();
         }

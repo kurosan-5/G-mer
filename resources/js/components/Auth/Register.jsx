@@ -22,7 +22,7 @@ const Register = () => {
             [name]: value,
         });
     };
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -47,6 +47,7 @@ const Register = () => {
                     localStorage.setItem('auth_token', res.data.token);
                     localStorage.setItem('auth_name', res.data.username);
                     navigate('/');
+                    location.reload();
                 } else {
                     setFormData({ ...formData, error_list: res.data.validation_errors })
                 }

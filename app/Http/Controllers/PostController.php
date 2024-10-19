@@ -56,14 +56,17 @@ class PostController extends Controller
         try {
             // ZIPファイルを保存
             $zipFile = $request->file('fileInput');
-             $fileName = time() . '_' . $zipFile->getClientOriginalName();
+            //入力されたファイルの名前を取得
+             $originFileName = $zipFile->getClientOriginalName();
+             //.zipが付属しているから取り除く
+             $originFileName = substr($originFileName, 0,-4);
             // フォルダ名をランダムな文字列に暗号化
             $randomFolderName = Str::random(40);
             // 解凍先のパスを設定
             $extractPath = storage_path('app/public/unzipped/' . $randomFolderName);
 
             $zipPath = $zipFile->storeAs('uploads', $randomFolderName);
-            $extractRelativePath = 'unzipped/' . $randomFolderName;
+            $extractRelativePath = 'unzipped/' . $randomFolderName .'/'. $originFileName;
 
             // ファイルを解凍
             $zip = new ZipArchive;
@@ -90,7 +93,8 @@ class PostController extends Controller
             $post->save();
 
             return response()->json([
-                'message' => 'post created'
+                'message' => 'post created',
+                'originFileName' => $originFileName,
             ]);
         } catch (\Exception $e) {
             return response()->json([
